@@ -1,1 +1,112 @@
+Problem Statement: Design a class structure for an Online Library Management System that allows:
 
+Adding and Borrowing Books
+
+Tracking Book Availability
+
+Managing Users (Readers/Librarians)
+
+Due Date and Late Fee Calculation
+
+The system should have the following classes:
+
+Book → Stores details like title, author, ISBN, availability.
+
+User → Represents members who borrow books.
+
+Library → Manages books and users.
+
+Transaction → Tracks borrowing records.
+
+
+
+import java.util.*;
+
+class Book {
+    String title;
+    String author;
+    String ISBN;
+    boolean isAvailable;
+
+    public Book(String title, String author, String ISBN) {
+        this.title = title;
+        this.author = author;
+        this.ISBN = ISBN;
+        this.isAvailable = true;
+    }
+
+    public void borrowBook() { isAvailable = false; }
+
+    public void returnBook() { isAvailable = true; }
+}
+
+class User {
+    String name;
+    String userId;
+    List<Book> borrowedBooks;
+
+    public User(String name, String userId) {
+        this.name = name;
+        this.userId = userId;
+        this.borrowedBooks = new ArrayList<>();
+    }
+
+    public void borrowBook(Book book) {
+        if (book.isAvailable) {
+            borrowedBooks.add(book);
+            book.borrowBook();
+            System.out.println(name + " borrowed: " + book.title);
+        } else {
+            System.out.println(book.title + " is not available.");
+        }
+    }
+
+    public void returnBook(Book bo ok) {
+        borrowedBooks.remove(book);
+        book.returnBook();
+        System.out.println(name + " returned: " + book.title);
+    }
+}
+
+class Library {
+    List<Book> books;
+    List<User> users;
+
+    public Library() {
+        books = new ArrayList<>();
+        users = new ArrayList<>();
+    }
+
+    public void addBook(Book book) { books.add(book); }
+
+    public void registerUser(User user) { users.add(user); }
+
+    public Book searchBook(String title) {
+        for (Book book : books) {
+            if (book.title.equalsIgnoreCase(title)) {
+                return book;
+            }
+        }
+        return null;
+    }
+}
+
+public class LibraryManagementSystem {
+    public static void main(String[] args) {
+        Library library = new Library();
+
+        // Adding books
+        Book book1 = new Book("Harry Potter", "J.K. Rowling", "12345");
+        Book book2 = new Book("The Hobbit", "J.R.R. Tolkien", "67890");
+        library.addBook(book1);
+        library.addBook(book2);
+
+        // Registering user
+        User user1 = new User("Alice", "U001");
+        library.registerUser(user1);
+
+        // Borrowing and returning books
+        user1.borrowBook(book1);  // Output: Alice borrowed: Harry Potter
+        user1.returnBook(book1);  // Output: Alice returned: Harry Potter
+    }
+}
